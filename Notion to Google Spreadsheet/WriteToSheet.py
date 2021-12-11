@@ -7,8 +7,8 @@ from gspread_dataframe import get_as_dataframe, set_with_dataframe
 
 class Integration():
     def __init__(self):
-        self.api_key = "secret_faCbeR4NUmRpK4gFi7QwrypIZeYesPt0OaM9dnMb1yU"
-        self.database_id = "0b925229bcfa419d80f519485066fd2b"
+        self.api_key = "**********"
+        self.database_id = "**************"
         self.scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
         self.creds = ServiceAccountCredentials.from_json_keyfile_name('eloquent-victor-333708-b2b68b2fd36b.json', self.scope)
         self.client = gspread.authorize(self.creds)
