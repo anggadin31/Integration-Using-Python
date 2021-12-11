@@ -7,10 +7,10 @@ from gspread_dataframe import get_as_dataframe, set_with_dataframe
 
 class Integration():
     def __init__(self):
-        self.api_key = "**********"
-        self.database_id = "**************"
+        self.api_key = "YOUR_NOTION_API_SECRET_KEY"
+        self.database_id = "YOUR_NOTION_DATABASE_ID"
         self.scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-        self.creds = ServiceAccountCredentials.from_json_keyfile_name('eloquent-victor-333708-b2b68b2fd36b.json', self.scope)
+        self.creds = ServiceAccountCredentials.from_json_keyfile_name('YOUR_JSON_FILE', self.scope)
         self.client = gspread.authorize(self.creds)
         self.sheet = self.client.open('Testing').worksheet('Sheet1')
     
@@ -24,6 +24,14 @@ class Integration():
             f"https://api.notion.com/v1/databases/{self.database_id}/query", 
             headers=headers).json()
         records = response["results"]
+        while response["has_more"]:
+          response = requests.post(
+              f"https://api.notion.com/v1/databases/{self.database_id}/query",
+              json={"start_cursor": response["next_cursor"]},
+              headers=headers,
+          ).json()
+          print("Loading page ...")
+          records.extend(response.get("results", []))
         return records
     
     def get_raw_value(self, item):
